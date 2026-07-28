@@ -1,0 +1,41 @@
+{
+  "name": "subaru-remote",
+  "version": "1.0.0",
+  "description": "Remote control for Subaru STARLINK vehicles — lock, unlock, remote start and stop via the MySubaru g2 API, as a library, CLI and HTTP service",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "subaru": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/http.js",
+    "cli": "node dist/cli.js",
+    "dev": "tsx src/http.ts",
+    "dev:cli": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "subaru",
+    "starlink",
+    "mysubaru",
+    "car",
+    "remote-start",
+    "vehicle",
+    "automation",
+    "shortcuts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.15.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}
