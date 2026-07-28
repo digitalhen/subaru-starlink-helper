@@ -1,8 +1,8 @@
 services:
-  subaru-remote:
+  subaru-starlink-api:
     build: .
-    image: subaru-remote:latest
-    container_name: subaru-remote
+    image: subaru-starlink-api:latest
+    container_name: subaru-starlink-api
     restart: unless-stopped
     # Read from .env in the project root — kept out of the image and out of git.
     env_file: .env

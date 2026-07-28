@@ -1,4 +1,4 @@
-# subaru-remote
+# subaru-starlink-api
 
 Lock, unlock, remote-start and stop a Subaru over STARLINK — as a TypeScript library, a CLI, and a small authenticated HTTP service.
 
@@ -119,13 +119,30 @@ No MySubaru password on the device. If a phone is lost, revoke by changing `API_
 ## Library
 
 ```ts
-import { SubaruClient, loadConfig } from 'subaru-remote';
+import { SubaruClient, loadConfig } from 'subaru-starlink-api';
 
 const car = new SubaruClient(loadConfig());
 const result = await car.start({ runTimeMinutes: 15, frontTemp: 68 });
 
 console.log(result.success, result.state, result.elapsedMs);
 ```
+
+## Menu bar app (macOS)
+
+`menubar/` builds **Subaru Bar** — a 1.5 MB status bar app with Lock, Unlock, Start and Stop.
+
+```bash
+cd menubar && ./build.sh
+open "Subaru Bar.app"
+```
+
+On first launch it opens Settings. Enter your email, password and PIN, press **Find My Vehicle** to fill in the key and VIN, then Save. Credentials go to the login Keychain, not to `.env`.
+
+The app reimplements the client natively in Swift rather than bundling Node — the API is form POSTs plus a polling loop, which `URLSession` does on its own, so there is no backend process and no embedded runtime. The trade-off is that the command payloads exist in two places; **`src/client.ts` is the reference**, since it is the side covered by tests.
+
+While a command is in flight the menu bar shows its progress, and completion posts a notification with the elapsed time. Unlock asks for confirmation first — see the security note below.
+
+The build is ad-hoc signed for local use. Distributing it would need a Developer ID, notarization, and something like Sparkle for updates; none of that is set up.
 
 ## Docker
 

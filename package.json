@@ -1,7 +1,7 @@
 {
-  "name": "subaru-remote",
+  "name": "subaru-starlink-api",
   "version": "1.0.0",
-  "description": "Remote control for Subaru STARLINK vehicles — lock, unlock, remote start and stop via the MySubaru g2 API, as a library, CLI and HTTP service",
+  "description": "Unofficial API client for Subaru STARLINK — lock, unlock, remote start and stop via the MySubaru g2 endpoints, as a library, CLI and HTTP service",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
