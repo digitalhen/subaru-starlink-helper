@@ -21,12 +21,14 @@ struct Credentials: Codable, Equatable {
     var pin = ""
     var vehicleKey = ""
     var vin = ""
-    /// Client-chosen identifier. MySubaru ties "remember this device" to it, so
-    /// it is generated once and then left alone.
-    var deviceId = String(Int(Date().timeIntervalSince1970 * 1000))
+    /// Trusted-device token for two-factor auth. Must be copied from a browser
+    /// session MySubaru already trusts — a generated value redirects to MFA.
+    var deviceId = ""
 
+    /// vehicleKey is deliberately absent: login and the commands both work
+    /// without it. deviceId is not optional — it is the 2FA trusted-device token.
     var isComplete: Bool {
-        !username.isEmpty && !password.isEmpty && !pin.isEmpty && !vehicleKey.isEmpty
+        !username.isEmpty && !password.isEmpty && !pin.isEmpty && !deviceId.isEmpty
     }
 }
 
@@ -201,6 +203,13 @@ actor SubaruAPI {
             html = String(decoding: home, as: UTF8.self)
         }
         guard html.contains("currenVehicleKey") else {
+            // An untrusted or missing deviceId lands here rather than on the
+            // dashboard, and it looks identical to a bad password otherwise.
+            if html.contains("multiFactorAuthentication") || html.contains("Two-Step") {
+                throw SubaruError(
+                    message: "MySubaru asked for two-factor auth, which means the Device ID "
+                        + "isn't one it trusts. Copy the deviceId from your browser's login request.")
+            }
             throw SubaruError(message: "Sign-in failed. Check your email and password.")
         }
         authenticated = true
@@ -498,16 +507,27 @@ struct SettingsView: View {
                 TextField("Email", text: $creds.username)
                 SecureField("Password", text: $creds.password)
                 SecureField("PIN", text: $creds.pin)
+                TextField("Device ID", text: $creds.deviceId)
             }
 
+            Text("Device ID is the trusted-device token for two-factor auth. Copy it "
+                 + "from the login request payload in your browser's Network tab — a "
+                 + "made-up value will not work.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
             HStack {
-                Button(busy ? "Finding vehicle…" : "Find My Vehicle") { discover() }
-                    .disabled(busy || creds.username.isEmpty || creds.password.isEmpty)
+                Button(busy ? "Checking…" : "Verify Sign-In") { discover() }
+                    .disabled(busy || creds.username.isEmpty || creds.password.isEmpty
+                              || creds.deviceId.isEmpty)
                 Spacer()
             }
 
+            // Optional: only needed to target a specific car on a multi-vehicle
+            // account. Filled in by Verify Sign-In.
             Form {
-                TextField("Vehicle key", text: $creds.vehicleKey)
+                TextField("Vehicle key (optional)", text: $creds.vehicleKey)
                 TextField("VIN", text: $creds.vin)
             }
 

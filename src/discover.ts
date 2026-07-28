@@ -190,10 +190,14 @@ function pair(keys: Positioned[], vins: Positioned[], names: Positioned[]): Disc
 }
 
 /**
- * A deviceId is a client-chosen identifier, not something the account issues,
- * so a fresh one is valid. Reuse an existing value where possible: MySubaru
- * ties its "remember this device" state to it, and a new id can trigger the
- * account's device-verification email.
+ * Placeholder only — a generated deviceId will NOT work.
+ *
+ * deviceId is MySubaru's trusted-device token for two-factor auth. Verified:
+ * logging in with a freshly generated value, or omitting the field, redirects
+ * to /multiFactorAuthentication.html and no session is established. It has to
+ * be copied from a browser session that MySubaru already trusts.
+ *
+ * Kept so callers can show the expected shape in setup output.
  */
 export function generateDeviceId(now = Date.now()): string {
   return String(now);

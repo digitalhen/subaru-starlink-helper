@@ -74,7 +74,7 @@ export function loadConfig({ requireVehicle = true }: LoadOptions = {}): SubaruC
     pin: requireVehicle ? required('SUBARU_PIN') : (optional('SUBARU_PIN') ?? ''),
     vehicleKey: requireVehicle ? required('SUBARU_VEHICLE_KEY') : (optional('SUBARU_VEHICLE_KEY') ?? ''),
     vin: optional('SUBARU_VIN'),
-    // Any stable value is accepted; see generateDeviceId for why reusing one matters.
+    // Must be a deviceId MySubaru already trusts — a generated one hits 2FA.
     deviceId: optional('SUBARU_DEVICE_ID') ?? String(Date.now()),
     pollTimeoutMs: numeric('POLL_TIMEOUT_MS', 120_000),
     pollIntervalMs: numeric('POLL_INTERVAL_MS', 2_000),

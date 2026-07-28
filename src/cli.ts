@@ -125,9 +125,11 @@ async function main(): Promise<number> {
     }
     console.log(
       `\n  SUBARU_DEVICE_ID=${config.deviceId ?? generateDeviceId()}` +
-        `\n\nKeep an existing SUBARU_DEVICE_ID if you already have one — MySubaru ties` +
-        `\nits "remember this device" state to it, and a new value can trigger a` +
-        `\ndevice-verification email.`,
+        `\n\nSUBARU_DEVICE_ID must be the trusted-device token from your browser's` +
+        `\nlogin request — it is what satisfies two-factor auth. A generated value` +
+        `\nredirects to /multiFactorAuthentication.html and will not work.` +
+        `\n\nSUBARU_VEHICLE_KEY is optional with a single vehicle; login and the` +
+        `\ncommands both work without it.`,
     );
     return 0;
   }

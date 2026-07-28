@@ -104,6 +104,16 @@ export class SubaruClient {
     );
 
     const location = response.headers.get('location') ?? '';
+
+    // An untrusted or missing deviceId redirects here instead of to the
+    // dashboard. Worth calling out — it is otherwise indistinguishable from a
+    // bad password, and deviceId is the field people get wrong.
+    if (location.includes('multiFactorAuthentication')) {
+      throw new SubaruError(
+        'MySubaru requested two-factor auth, so SUBARU_DEVICE_ID is not a trusted ' +
+          "device token. Copy the deviceId from your browser's login request payload.",
+      );
+    }
     if (location.includes('/login') || location.includes('error')) {
       throw new SubaruError(
         'Login rejected by MySubaru. Check SUBARU_USERNAME and SUBARU_PASSWORD.',

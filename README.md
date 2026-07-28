@@ -55,7 +55,9 @@ The original Reddit instructions still work as a fallback, and several commenter
 3. Select the `login` request, then the **Payload** (Chrome) or **Request** (Safari) tab.
 4. Copy `lastSelectedVehicleKey` and `deviceId`.
 
-`deviceId` is a millisecond timestamp — a 13-digit number like `1700000000000`. It is chosen by the client, not issued by Subaru, so any stable value is technically valid. **Reuse an existing one where you can**: MySubaru ties its "remember this device" state to it, and a fresh value can trigger a device-verification email.
+`deviceId` is a millisecond timestamp — a 13-digit number like `1700000000000` — and it is **the trusted-device token for two-factor auth**. It has to be one MySubaru already trusts; you cannot invent one. Logging in with a fresh value, or omitting the field, redirects to `/multiFactorAuthentication.html` and the session is never established. This is verified behaviour, not a guess.
+
+That makes `deviceId` the one value you genuinely have to extract from a browser session. `SUBARU_VEHICLE_KEY`, by contrast, is optional — see below.
 
 Your PIN is the four-digit code you use for remote commands on the MySubaru site. It is not your password, and a wrong PIN fails the *command*, not the login — which makes it an easy thing to misdiagnose.
 
@@ -126,6 +128,23 @@ const result = await car.start({ runTimeMinutes: 15, frontTemp: 68 });
 
 console.log(result.success, result.state, result.elapsedMs);
 ```
+
+## iOS Shortcuts
+
+`shortcuts/` holds updated versions of the four shortcuts from the Reddit post. They are the same known-good ten actions, with one change: **they no longer ask for `lastSelectedVehicleKey`.**
+
+That field turned out to be unnecessary. Login succeeds with it empty, and the command payloads never reference it — verified by logging in with no vehicle key and locking the car successfully. So installing now asks for four things instead of five:
+
+| | |
+|---|---|
+| Email | Your MySubaru sign-in |
+| Password | |
+| PIN | The four-digit remote-command code |
+| Device ID | The trusted-device token — see above |
+
+Double-click a `.shortcut` file to install. On a multi-vehicle account the command goes to whichever car was last selected on the website; set the vehicle key if you need to target a specific one.
+
+`deviceId` unfortunately still has to come from the browser, and it was the value people struggled with most in the thread. It cannot be removed the way the vehicle key was — it is what satisfies two-factor auth.
 
 ## Menu bar app (macOS)
 
