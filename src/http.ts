@@ -102,6 +102,6 @@ app.get('/status/:serviceRequestId', authenticate, async (req: Request, res: Res
 });
 
 app.listen(PORT, () => {
-  console.log(`subaru-starlink-api listening on :${PORT}`);
+  console.log(`subaru-starlink-helper listening on :${PORT}`);
   console.log(`  commands: ${Object.keys(COMMANDS).map((c) => `/${c}`).join(' ')}`);
 });

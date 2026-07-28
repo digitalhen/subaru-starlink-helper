@@ -1,5 +1,5 @@
 {
-  "name": "subaru-starlink-api",
+  "name": "subaru-starlink-helper",
   "version": "1.0.0",
   "description": "Unofficial API client for Subaru STARLINK — lock, unlock, remote start and stop via the MySubaru g2 endpoints, as a library, CLI and HTTP service",
   "type": "module",

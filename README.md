@@ -1,4 +1,4 @@
-# subaru-starlink-api
+# subaru-starlink-helper
 
 Lock, unlock, remote-start and stop a Subaru over STARLINK — as a TypeScript library, a CLI, and a small authenticated HTTP service.
 
@@ -121,7 +121,7 @@ No MySubaru password on the device. If a phone is lost, revoke by changing `API_
 ## Library
 
 ```ts
-import { SubaruClient, loadConfig } from 'subaru-starlink-api';
+import { SubaruClient, loadConfig } from 'subaru-starlink-helper';
 
 const car = new SubaruClient(loadConfig());
 const result = await car.start({ runTimeMinutes: 15, frontTemp: 68 });
@@ -131,7 +131,7 @@ console.log(result.success, result.state, result.elapsedMs);
 
 ## iOS Shortcuts
 
-**Download: <https://digitalhen.github.io/subaru-starlink-api/>**
+**Download: <https://digitalhen.github.io/subaru-starlink-helper/>**
 
 `docs/` holds updated versions of the four shortcuts from the Reddit post, and is what GitHub Pages serves — so the files in the repo are exactly the files people download. They are the same known-good ten actions, with one change: **they no longer ask for `lastSelectedVehicleKey`.**
 
@@ -157,7 +157,7 @@ cd menubar && ./build.sh
 open "Subaru Bar.app"
 ```
 
-On first launch it opens Settings. Enter your email, password and PIN, press **Find My Vehicle** to fill in the key and VIN, then Save. Credentials go to the login Keychain, not to `.env`.
+On first launch it opens Settings. Enter your email, password, PIN and Device ID, then press **Verify Sign-In** to confirm the credentials work and fill in the vehicle details. The vehicle key is optional. Credentials go to the login Keychain, not to `.env`.
 
 The app reimplements the client natively in Swift rather than bundling Node — the API is form POSTs plus a polling loop, which `URLSession` does on its own, so there is no backend process and no embedded runtime. The trade-off is that the command payloads exist in two places; **`src/client.ts` is the reference**, since it is the side covered by tests.
 
