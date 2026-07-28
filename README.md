@@ -131,7 +131,9 @@ console.log(result.success, result.state, result.elapsedMs);
 
 ## iOS Shortcuts
 
-`shortcuts/` holds updated versions of the four shortcuts from the Reddit post. They are the same known-good ten actions, with one change: **they no longer ask for `lastSelectedVehicleKey`.**
+**Download: <https://digitalhen.github.io/subaru-starlink-api/>**
+
+`docs/` holds updated versions of the four shortcuts from the Reddit post, and is what GitHub Pages serves — so the files in the repo are exactly the files people download. They are the same known-good ten actions, with one change: **they no longer ask for `lastSelectedVehicleKey`.**
 
 That field turned out to be unnecessary. Login succeeds with it empty, and the command payloads never reference it — verified by logging in with no vehicle key and locking the car successfully. So installing now asks for four things instead of five:
 
