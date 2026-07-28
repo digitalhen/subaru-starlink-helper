@@ -175,6 +175,8 @@ export class SubaruClient {
       success: carSucceeded,
       serviceRequestId,
       state,
+      serviceType: typeof data['remoteServiceType'] === 'string' ? data['remoteServiceType'] : undefined,
+      cancelled: data['cancelled'] === true,
       errorCode: final.errorCode ?? (data['errorCode'] as string | undefined) ?? null,
       confirmed: true,
       elapsedMs: Date.now() - startedAt,

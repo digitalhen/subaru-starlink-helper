@@ -154,7 +154,7 @@ What is verified, and what isn't:
 
 - **Command payloads** — extracted from the working shortcuts and asserted against the published Reddit versions in `src/client.test.ts`. All four match exactly.
 - **Login and discovery** — exercised against the live site; `discover` returns the correct key, VIN and nickname.
-- **Status polling** — the endpoint and body were taken from a real browser session, but the terminal-state handling has not yet been observed against a command in flight.
+- **Status polling** — confirmed end to end against a live remote start: the command reached `remoteServiceState: finished` with `data.success: true` after 15.3s of polling.
 - **Multi-vehicle pairing** — implemented and unit-tested against a fixture, but not yet run against a real multi-car account. If you have several Subarus on one account, `discover --json` will show what it saw.
 
 ## Credits

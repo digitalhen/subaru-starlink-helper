@@ -66,6 +66,14 @@ export interface CommandResult {
   serviceRequestId?: string;
   /** Terminal remoteServiceState, e.g. `finished`. */
   state?: string;
+  /**
+   * Which command the API reports it acted on, e.g. `engineStart`. Worth
+   * checking when several commands are in flight — the status endpoint is
+   * keyed by request id, not by the command you think you sent.
+   */
+  serviceType?: string;
+  /** True if the command was cancelled rather than completed. */
+  cancelled?: boolean;
   errorCode?: string | null;
   /** Whether we polled to completion or returned early. */
   confirmed: boolean;
